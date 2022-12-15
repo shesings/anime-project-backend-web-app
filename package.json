@@ -1,0 +1,26 @@
+{
+  "name": "server",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "start:dev": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shesings/anime-project-backend-web-app.git"
+  },
+  "author": "sheetal",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shesings/anime-project-backend-web-app/issues"
+  },
+  "homepage": "https://github.com/shesings/anime-project-backend-web-app#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  }
+}
