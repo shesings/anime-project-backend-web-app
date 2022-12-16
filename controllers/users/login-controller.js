@@ -1,3 +1,4 @@
+import * as dao from './users-dao.js';
 let users = [
   {
     username: "admin",
@@ -35,12 +36,16 @@ const findUsers = (req, res) => {
 const signUp = async (req, res) => {
   const newUser = req.body;
   const { email } = newUser;
-  const currentUserArr = users.filter((user) => user.email === email);
-  if (currentUserArr && currentUserArr.length) {
-    res.status(400).send("email already exists");
-  }
-  users.push(newUser); // dao.createUser()
-  res.json(users);
+  try{
+    const createdUser = await dao.createUser(newUser);
+    res.json(createdUser);
+  } catch(e) {
+    if(e.code == 11000) {
+      res.status(400).send('NON_UNIQUE_EMAIL');
+    } else {
+      res.status(403).send(e);
+    }
+  } 
 };
 
 const login = async (req, res) => {
