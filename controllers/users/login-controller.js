@@ -50,17 +50,14 @@ const signUp = async (req, res) => {
 
 const login = async (req, res) => {
   const user = req.body;
-  console.log(user);
-  // const tuits = await tuitsDao.findTuits()
   const { username, password, email } = user;
-  const currentUserArr = users.filter((user) => user.email === email);
-  if (!currentUserArr || !currentUserArr.length) {
+  const currentUser = await dao.findUserByEmail(email);
+  if (!currentUser) {
     res.sendStatus(403);
   }
-  const currentUser = currentUserArr[0];
 
   if (password === currentUser.password && username === currentUser.username) {
-    res.json({ currentUser, authenticated: true });
+    res.json(currentUser);
   }
   res.sendStatus(403);
 };

@@ -1,26 +1,4 @@
-let users = [
-  {
-    username: "admin",
-    type: "ADMIN",
-    _id: "123",
-    password: "pass",
-    email: "user@admin.com",
-  },
-  {
-    username: "test1",
-    type: "USER",
-    _id: "123",
-    password: "pass",
-    email: "test1@admin.com",
-  },
-  {
-    username: "test2",
-    type: "PREMIUM_USER",
-    _id: "123",
-    password: "pass",
-    email: "test2@admin.com",
-  },
-];
+import * as dao from './users-dao.js';
 
 const UserController = (app) => {
   // use express instance app to declare HTTP GET
@@ -29,6 +7,9 @@ const UserController = (app) => {
   app.post("/api/users", createUser); // map URL pattern to handler function
   app.delete("/api/users/:uid", deleteUser);
   app.put("/api/users/:uid", updateUser);
+  app.put("/api/users/watchlist/:uid", updateWatchList);
+  app.put("/api/users/favorites/:uid", updateFavorites);
+  app.put("/api/users/completed/:uid", updateCompleteList);
 };
 const findUsers = (req, res) => {
   const type = req.query.type; // retrieve type parameter from query
@@ -41,9 +22,9 @@ const findUsers = (req, res) => {
   res.json(users); // otherwise respond with all users
 };
 
-const findUserById = (req, res) => {
+const findUserById = async (req, res) => {
   const userId = req.params.uid;
-  const user = users.find((u) => u._id === userId);
+  const user = await dao.findUserById(userId);
   res.json(user);
 };
 
@@ -65,15 +46,39 @@ const updateUser = (req, res) => {
   // handle PUT /api/users/:uid
   const userId = req.params["uid"]; // get user ID from path
   const updates = req.body; // BODY includes updated fields
-  users = users.map(
-    (
-      usr // create a new array of users
-    ) =>
-      usr._id === userId
-        ? { ...usr, ...updates } 
-        : usr 
-  ); //
+  dao.updateUser(userId, updates);
   res.sendStatus(200); // return OK
 };
+
+const updateFavorites = async (req, res) => {
+      // handle PUT /api/users/:uid
+  const userId = req.params["uid"]; // get user ID from path
+  const updates = req.body; // BODY includes updated fields
+  const user = await dao.findUserById(userId);
+  user.personalProfile.favorites.push(updates);
+
+  const test = await dao.updateUser(userId, user);
+  res.status(200).send(test);
+}
+
+const updateWatchList = async (req, res) => {
+    // handle PUT /api/users/:uid
+    const userId = req.params["uid"]; // get user ID from path
+    const updates = req.body; // BODY includes updated fields
+    const user = await dao.findUserById(userId);
+    user.personalProfile.toBeWatched.push(updates);
+    const test = await dao.updateUser(userId, user);
+    res.status(200).send(test);
+}
+
+const updateCompleteList = async (req, res) => {
+    // handle PUT /api/users/:uid
+    const userId = req.params["uid"]; // get user ID from path
+    const updates = req.body; // BODY includes updated fields
+    const user = await dao.findUserById(userId);
+    user.personalProfile.completed.push(updates);
+    const test = await dao.updateUser(userId, user);
+    res.status(200).send(test);
+}
 
 export default UserController; // exports so app.js can import
