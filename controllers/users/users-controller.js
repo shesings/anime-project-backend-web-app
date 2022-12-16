@@ -42,12 +42,13 @@ const deleteUser = (req, res) => {
   res.sendStatus(200);
 };
 
-const updateUser = (req, res) => {
+const updateUser = async (req, res) => {
   // handle PUT /api/users/:uid
   const userId = req.params["uid"]; // get user ID from path
   const updates = req.body; // BODY includes updated fields
-  dao.updateUser(userId, updates);
-  res.sendStatus(200); // return OK
+  console.log(userId, updates);
+  const user = await dao.updateUser(userId, updates);
+  res.sendStatus(200) // return OK
 };
 
 const updateFavorites = async (req, res) => {

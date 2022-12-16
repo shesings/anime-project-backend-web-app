@@ -10,8 +10,12 @@ const personalProfileSchema = mongoose.Schema({
 const schema = mongoose.Schema({
     username: String,
     password: String,
-    firstName: String,
-    lastName: String,
+    name: String,
+    nick: String,
+    bio: String,
+    dob: String,
+    location: String,
+    joined: String,
     email: {
         type:String,
         required: true,
@@ -21,29 +25,3 @@ const schema = mongoose.Schema({
     personalProfile: personalProfileSchema
 }, {collection: 'users'});
 export default schema;
-
-// const payload = {
-//     "username": "admin2",
-//     "email": "user2@admin.com",
-//     "password": "pass",
-//     "role": "User",
-//     "personalProfile": {
-//         favorites: [{
-//             animeId: '222',
-//             animeTitle: 'blue l0ck',
-//             ratingScore: '99',
-//         }],
-//         completed: [{
-//             animeId: '223',
-//             animeTitle: 'blue l1ck',
-//             ratingScore: '99',
-//         }],
-//         toBeWatched: [{
-//             animeId: '224',
-//             animeTitle: 'blue l2ck',
-//             ratingScore: '99'
-//         }]
-
-//     }
-
-// }
